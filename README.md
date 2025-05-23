@@ -2,7 +2,7 @@
 
 A tool to generate ASN QR Codes for paperless-ngx with a built-in cli.
 
-Inspired by the idea of a Rust port of (paperless-asn-qr-codes)[https://github.com/entropia/paperless-asn-qr-codes]. More functionality was added though.
+Inspired by the idea of a Rust port of [paperless-asn-qr-codes](https://github.com/entropia/paperless-asn-qr-codes). More functionality was added though.
 
 
 ## Usage
@@ -50,6 +50,6 @@ Some different sheet types are supported with the -f/--format argument, however,
 
 ## Attribution
 
-This tool started as a Rust port of the Python tool by @entropia (paperless-asn-qr-codes)[https://github.com/entropia/paperless-asn-qr-codes], which in turn "is based upon a public domain label generation class from @timrprobocom https://gist.github.com/timrprobocom/3946aca8ab75df8267bbf892a427a1b7".
+This tool started as a Rust port of the Python tool by @entropia [paperless-asn-qr-codes](https://github.com/entropia/paperless-asn-qr-codes), which in turn "is based upon a public domain label generation class from @timrprobocom https://gist.github.com/timrprobocom/3946aca8ab75df8267bbf892a427a1b7".
 
-This tool includes the OpenSans Regular font from Google Fonts, desiged by Steve Matteson, which is licensed under the SIL Open Font License, Version 1.1. The full license statement can be found in [LICENSE.SIL.OpenFont].
+This tool includes the OpenSans Regular font from Google Fonts, desiged by Steve Matteson, which is licensed under the SIL Open Font License, Version 1.1. The full license statement can be found in [LICENSE.SIL.OpenFont](LICENSE.SIL.OpenFont).
