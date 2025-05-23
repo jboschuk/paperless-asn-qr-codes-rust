@@ -2,7 +2,9 @@
 
 A tool to generate ASN QR Codes for paperless-ngx with a built-in cli.
 
-Inspired by the idea of a Rust port of [paperless-asn-qr-codes](https://github.com/entropia/paperless-asn-qr-codes). More functionality was added though.
+Inspired by the idea of a Rust port of [paperless-asn-qr-codes](https://github.com/entropia/paperless-asn-qr-codes).
+
+**Note: This is still work in progress and in it's early stages. It's also a free-time project, so please expect delays in the implementation of missing functionalities.**
 
 
 ## Usage
