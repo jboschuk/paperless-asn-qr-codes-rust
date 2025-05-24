@@ -6,7 +6,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  PROJECT_NAME: paperless-asn-qr-codes-rust
+  PROJECT_NAME: paperless-asn-qr-codes-rs
 
 jobs:
   build:
@@ -20,33 +20,42 @@ jobs:
           - name: linux-amd64
             runner: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-          - name: win-amd64
+            archive: tar.gz
+          - name: windows-amd64-msvc
             runner: windows-latest
             target: x86_64-pc-windows-msvc
-          - name: macos-amd64
-            runner: macos-latest
-            target: x86_64-apple-darwin
-          - name: macos-arm64
-            runner: macos-latest
-            target: aarch64-apple-darwin
+            archive: zip
 
     # The steps to run for each matrix item
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
  
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: actions/setup-rust@v1
         with:
-          targets: "${{ matrix.target }}"
+          rust-version: stable
  
       - name: Build Binary
         run: cargo build --verbose --locked --release --target ${{ matrix.target }}
+        
+      - name: Compress Binary
+        run: |
+          BIN_SUFFIX=""
+          if [[ "${{ matrix.runner }}" == "windows-latest" ]]; then
+            BIN_SUFFIX=".exe"
+          fi
+
+          BIN_OUTPUT="target/${{ matrix.target }}/release/${PROJECT_NAME}${BIN_SUFFIX}"
+          BIN_RELEASE="${PROJECT_NAME}-${{ matrix.name }}${BIN_SUFFIX}"
+          
+          mkdir -p dist
+          cp "${BIN_OUTPUT}" "./dist/${BIN_RELEASE}"
+          cd dist
+          tar -czvf "${PROJECT_NAME}-${{ matrix.name }}.${{ matrix.archive }}" "${BIN_RELEASE}"
  
-      - name: Upload artifact
+      - name: Upload Binary as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: Binary
-          path: |
-            ${{ steps.compile.outputs.BUILT_ARCHIVE }}
-            ${{ steps.compile.outputs.BUILT_CHECKSUM }}
+          name: "${PROJECT_NAME}-${{ matrix.name }}.${{ matrix.archive }}"
+          path: "dist/${PROJECT_NAME}-${{ matrix.name }}.${{ matrix.archive }}"
