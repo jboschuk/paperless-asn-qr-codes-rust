@@ -48,7 +48,7 @@ generate_pdf(label_info, page_size, asn_start, tag, code_format, border, output)
 
 Some different sheet types are supported with the -f/--format argument, however, not all are tested.
 
-- Avery 3657 (40 Labels on A$)
+- Avery 3657 (40 Labels on A4)
 
 ## Attribution
 
