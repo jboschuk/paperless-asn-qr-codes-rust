@@ -6,7 +6,7 @@ use printpdf::{
     Color, Mm, Op, ParsedFont, PdfDocument, PdfPage, PdfSaveOptions, Point, Pt, RawImage, Rect,
     Rgb, TextItem, XObjectTransform,
 };
-use qrcode::QrCode;
+use qrcode::{QrCode, Version};
 
 pub mod labels;
 pub use labels::{LabelInfo, PaperSize};
@@ -193,7 +193,13 @@ fn generate_barcode(
 ) -> Result<ImageBuffer<Luma<u8>, Vec<u8>>, String> {
     match format {
         BarcodeFormat::Qr => {
-            let code = QrCode::with_error_correction_level(data, qrcode::EcLevel::M)
+            // use Micro QR codes for label height < 20mm
+            let version = if label_height < Mm(20.0) {
+                Version::Micro(4)
+            } else {
+                Version::Normal(1)
+            };
+            let code = QrCode::with_version(data, version, qrcode::EcLevel::M)
                 .expect("Failed to create QR code");
             let code = code.render::<Luma<u8>>().build();
             Ok(code)
