@@ -31,14 +31,14 @@ fn get_page_dimensions(paper: &PaperSize) -> (Mm, Mm) {
 
 /// Main fuction which generates the pdf file with the barcodes
 pub fn generate_pdf(
-label_info: LabelInfo,
-page_size: PaperSize,
-asn_start: u32,
-digits: usize,
-tag: String,
-code_format: BarcodeFormat,
-border: bool,
-output: PathBuf,
+    label_info: LabelInfo,
+    page_size: PaperSize,
+    asn_start: u32,
+    digits: usize,
+    tag: String,
+    code_format: BarcodeFormat,
+    border: bool,
+    output: PathBuf,
     font_size: f32,
 ) -> Result<(), Error> {
     let (page_width, page_height) = get_page_dimensions(&page_size);
@@ -104,20 +104,20 @@ output: PathBuf,
             .map_err(|err| anyhow::anyhow!(err))?;
 
             // Generate label content
-                    let mut image_buf = Vec::new();
-                    barcode_img_data.write_to(
-                        &mut std::io::Cursor::new(&mut image_buf),
-                        image::ImageFormat::Png,
-                    )?;
-                    
-                    let image = RawImage::decode_from_bytes(&image_buf.as_slice(), &mut msg_vec)
-                        .expect("Failed to generate RAW image");
-                
-                    // Not sure why height and width are 4-fold?
-                    let bw = image.width / 4;
-                    let bh = image.height / 4;
-                    let bw_pt = Pt(bw as f32);
-                    let bh_pt = Pt(bh as f32);
+            let mut image_buf = Vec::new();
+            barcode_img_data.write_to(
+                &mut std::io::Cursor::new(&mut image_buf),
+                image::ImageFormat::Png,
+            )?;
+
+            let image = RawImage::decode_from_bytes(&image_buf.as_slice(), &mut msg_vec)
+                .expect("Failed to generate RAW image");
+
+            // Not sure why height and width are 4-fold?
+            let bw = image.width / 4;
+            let bh = image.height / 4;
+            let bw_pt = Pt(bw as f32);
+            let bh_pt = Pt(bh as f32);
 
             // calculate barcode scaling factor to scale it to 80% label height
             let scaling = 0.8 * label_height_pt.0 / bh_pt.0;
@@ -125,22 +125,22 @@ output: PathBuf,
             let barcode_x_pt = label_x_pt + label_width_pt * 0.05;
             let barcode_y_pt = label_y_pt + ((label_height_pt - bh_pt * scaling) / 2.0); // Adjust vertical position
 
-                    let img_xobj_id = doc.add_image(&image);
-                    page1_contents.extend([
-                        Op::SaveGraphicsState,
-                        Op::UseXobject {
-                            id: img_xobj_id.clone(),
-                            transform: XObjectTransform {
-                                translate_x: Some(barcode_x_pt),
-                                translate_y: Some(barcode_y_pt),
-                                rotate: None,
+            let img_xobj_id = doc.add_image(&image);
+            page1_contents.extend([
+                Op::SaveGraphicsState,
+                Op::UseXobject {
+                    id: img_xobj_id.clone(),
+                    transform: XObjectTransform {
+                        translate_x: Some(barcode_x_pt),
+                        translate_y: Some(barcode_y_pt),
+                        rotate: None,
                         scale_x: Some(scaling),
                         scale_y: Some(scaling),
-                                dpi: Some(dpi),
-                            },
-                        },
+                        dpi: Some(dpi),
+                    },
+                },
                 Op::RestoreGraphicsState,
-                    ]);
+            ]);
 
             // draw label border if enabled (via `--border` flag)
             if border {
