@@ -10,7 +10,7 @@ Inspired by the idea of a Rust port of [paperless-asn-qr-codes](https://github.c
 ## Usage
 
 ### As a CLI
-```bash
+```
 Usage: paperless-asn-qr-codes-rust.exe [OPTIONS] <ASN_START> <FORMAT> <PAGE_SIZE> [OUTPUT]
 
 Arguments:
