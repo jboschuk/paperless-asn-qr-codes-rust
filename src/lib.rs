@@ -1,7 +1,11 @@
-use std::{fs::File, io::{BufWriter, Write}, path::PathBuf};
+use std::{
+    fs::File,
+    io::{BufWriter, Write},
+    path::PathBuf,
+};
 
-use anyhow::Error;
 use ::image::{ImageBuffer, Luma};
+use anyhow::Error;
 use printpdf::{
     Color, Mm, Op, ParsedFont, PdfDocument, PdfPage, PdfSaveOptions, Point, Pt, RawImage, Rect,
     Rgb, TextItem, XObjectTransform,
@@ -80,7 +84,7 @@ output: PathBuf,
     for row in 0..label_info.labels_vertical {
         for col in 0..label_info.labels_horizontal {
             let running_number = asn_start + row * label_info.labels_horizontal + col;
-            let label_text = format!("{}{:0width$}", tag, running_number, width=digits);
+            let label_text = format!("{}{:0width$}", tag, running_number, width = digits);
             println!("Putting {} at position ({}, {})", &label_text, &row, &col);
 
             // Calculate label position
@@ -97,8 +101,8 @@ output: PathBuf,
                 &label_text,
                 label_info.label_size.1,
                 label_info.label_size.0,
-            ).map_err(|err| anyhow::anyhow!(err) )?;
-
+            )
+            .map_err(|err| anyhow::anyhow!(err))?;
 
             // Generate label content
                     let mut image_buf = Vec::new();
@@ -136,7 +140,7 @@ output: PathBuf,
                                 dpi: Some(dpi),
                             },
                         },
-                        Op::RestoreGraphicsState
+                Op::RestoreGraphicsState,
                     ]);
 
             // draw label border if enabled (via `--border` flag)
