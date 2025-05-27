@@ -13,6 +13,10 @@ pub struct Args {
     /// Starting ASN number
     pub asn_start: u32,
 
+    /// Number of digits in the ASN number
+    #[arg(short, long, default_value="7")]
+    pub digits: usize,
+
     /// Label format ('avery3657' or 'custom')
     #[arg(value_enum)]
     pub format: PredefinedFormat,

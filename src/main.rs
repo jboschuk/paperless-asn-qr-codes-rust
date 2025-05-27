@@ -15,6 +15,7 @@ fn main() -> Result<(), Error> {
         args.format.get_label_info().unwrap(),
         args.page_size,
         args.asn_start,
+        args.digits,
         args.tag,
         args.code_format,
         args.border,

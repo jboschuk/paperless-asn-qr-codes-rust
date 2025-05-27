@@ -26,7 +26,7 @@ fn get_page_dimensions(paper: &PaperSize) -> (Mm, Mm) {
 }
 
 /// Main fuction which generates the pdf file with the barcodes
-pub fn generate_pdf(label_info: LabelInfo, page_size: PaperSize, asn_start: u32, tag: String, code_format: BarcodeFormat, border: bool, output: PathBuf) -> Result<(), Error> {
+pub fn generate_pdf(label_info: LabelInfo, page_size: PaperSize, asn_start: u32, digits: usize, tag: String, code_format: BarcodeFormat, border: bool, output: PathBuf) -> Result<(), Error> {
     let (page_width, page_height) = get_page_dimensions(&page_size);
 
     let mut doc = PdfDocument::new("Paperless ASN Barcode Generator");
@@ -70,7 +70,7 @@ pub fn generate_pdf(label_info: LabelInfo, page_size: PaperSize, asn_start: u32,
     for row in 0..label_info.labels_vertical {
         for col in 0..label_info.labels_horizontal {
             let running_number = asn_start + row * label_info.labels_horizontal + col;
-            let label_text = format!("{}{:0>7}", tag, running_number);
+            let label_text = format!("{}{:0width$}", tag, running_number, width=digits);
             println!("Putting {} at position ({}, {})", &label_text, &row, &col);
 
             // Calculate label position
