@@ -82,17 +82,15 @@ pub fn generate_pdf(label_info: LabelInfo, page_size: PaperSize, asn_start: u32,
             let label_x_pt = Pt::from(label_x);
             let label_y_pt = Pt::from(label_y);
 
-            let barcode_result = generate_barcode(
+            let barcode_img_data = generate_barcode(
                 &code_format,
                 &label_text,
                 label_info.label_size.1,
                 label_info.label_size.0,
-            );
+            ).map_err(|err| anyhow::anyhow!(err) )?;
 
 
             // Generate label content
-            match barcode_result {
-                Ok(barcode_img_data) => {
                     let mut image_buf = Vec::new();
                     barcode_img_data.write_to(
                         &mut std::io::Cursor::new(&mut image_buf),
@@ -130,11 +128,6 @@ pub fn generate_pdf(label_info: LabelInfo, page_size: PaperSize, asn_start: u32,
                         },
                         Op::RestoreGraphicsState
                     ]);
-                }
-                Err(err) => {
-                    eprintln!("{}", err);
-                }
-            }
 
             // draw label border if enabled (via `--border` flag)
             if border {
