@@ -15,11 +15,15 @@ Usage: paperless-asn-qr-codes-rust.exe [OPTIONS] <ASN_START> <FORMAT> <PAGE_SIZE
 
 Arguments:
   <ASN_START>  Starting ASN number
-  <FORMAT>     Label format ('avery3657' or 'custom') [possible values: avery3657]
+  <FORMAT>     Label format ('avery3657' or 'custom') [possible values: avery3657, avery-l4731]
   <PAGE_SIZE>  Page size ('letter' or 'a4')
   [OUTPUT]     Output filename [default: labels.pdf]
 
 Options:
+  -d, --digits <DIGITS>
+          Number of digits in the ASN number [default: 7]
+  -f, --font-size <FONT_SIZE>
+          Font size of the label text [default: 9]
   -b, --border
           Show label borders, helpful for test prints
   -t, --tag <TAG>
