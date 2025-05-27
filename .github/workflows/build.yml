@@ -1,0 +1,61 @@
+name: Build
+
+on:
+  release:
+    types: [published]
+
+env:
+  CARGO_TERM_COLOR: always
+  PROJECT_NAME: paperless-asn-qr-codes-rs
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.runner }}
+
+    # Define the build matrix for cross-compilation
+    strategy:
+      matrix:
+        include:
+          - name: linux-amd64
+            runner: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            archive: tar.gz
+          - name: windows-amd64-msvc
+            runner: windows-latest
+            target: x86_64-pc-windows-msvc
+            archive: zip
+
+    # The steps to run for each matrix item
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+ 
+      - name: Install Rust
+        uses: actions/setup-rust@v1
+        with:
+          rust-version: stable
+ 
+      - name: Build Binary
+        run: cargo build --verbose --locked --release --target ${{ matrix.target }}
+        
+      - name: Compress Binary
+        run: |
+          BIN_SUFFIX=""
+          if [[ "${{ matrix.runner }}" == "windows-latest" ]]; then
+            BIN_SUFFIX=".exe"
+          fi
+
+          BIN_OUTPUT="target/${{ matrix.target }}/release/${PROJECT_NAME}${BIN_SUFFIX}"
+          BIN_RELEASE="${PROJECT_NAME}-${{ matrix.name }}${BIN_SUFFIX}"
+          
+          mkdir -p dist
+          cp "${BIN_OUTPUT}" "./dist/${BIN_RELEASE}"
+          cd dist
+          tar -czvf "${PROJECT_NAME}-${{ matrix.name }}.${{ matrix.archive }}" "${BIN_RELEASE}"
+ 
+      - name: Upload Binary as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: "${PROJECT_NAME}-${{ matrix.name }}.${{ matrix.archive }}"
+          path: "dist/${PROJECT_NAME}-${{ matrix.name }}.${{ matrix.archive }}"
