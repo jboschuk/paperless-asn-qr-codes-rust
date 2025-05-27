@@ -76,7 +76,6 @@ output: PathBuf,
     let label_width_pt = Pt::from(label_width);
     let label_height_pt = Pt::from(label_height);
 
-    let mut text_x_offset = Pt(2.0); // place text with 2pt distance to the right of QR code
     let text_y_offset = (label_height_pt - font_size_text_pt) / 2.0; // text centered vertically
 
     let dpi = 300.0;
@@ -120,11 +119,11 @@ output: PathBuf,
                     let bw_pt = Pt(bw as f32);
                     let bh_pt = Pt(bh as f32);
 
-                    let barcode_x_pt = label_x_pt + Pt(7.0);
-                    let barcode_y_pt = label_y_pt + ((label_height_pt - bh_pt) / 2.0); // Adjust vertical position
+            // calculate barcode scaling factor to scale it to 80% label height
+            let scaling = 0.8 * label_height_pt.0 / bh_pt.0;
 
-                    // update text x offset
-                    text_x_offset = bw_pt + Pt(4.0);
+            let barcode_x_pt = label_x_pt + label_width_pt * 0.05;
+            let barcode_y_pt = label_y_pt + ((label_height_pt - bh_pt * scaling) / 2.0); // Adjust vertical position
 
                     let img_xobj_id = doc.add_image(&image);
                     page1_contents.extend([
@@ -135,8 +134,8 @@ output: PathBuf,
                                 translate_x: Some(barcode_x_pt),
                                 translate_y: Some(barcode_y_pt),
                                 rotate: None,
-                                scale_x: None,
-                                scale_y: None,
+                        scale_x: Some(scaling),
+                        scale_y: Some(scaling),
                                 dpi: Some(dpi),
                             },
                         },
@@ -157,7 +156,7 @@ output: PathBuf,
             };
 
             // write label_text as plain text
-            let text_x_pt = label_x_pt + text_x_offset;
+            let text_x_pt = label_x_pt + bw_pt * scaling + label_width_pt * 0.05;
             let text_y_pt = label_y_pt + text_y_offset;
             let pos = Point {
                 x: text_x_pt,
