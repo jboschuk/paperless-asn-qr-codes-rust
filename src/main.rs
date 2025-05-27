@@ -20,6 +20,7 @@ fn main() -> Result<(), Error> {
         args.code_format,
         args.border,
         args.output,
+        args.font_size,
     )
     .inspect_err(|e| eprintln!("{}", e))?;
 

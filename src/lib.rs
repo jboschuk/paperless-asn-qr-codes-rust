@@ -26,13 +26,23 @@ fn get_page_dimensions(paper: &PaperSize) -> (Mm, Mm) {
 }
 
 /// Main fuction which generates the pdf file with the barcodes
-pub fn generate_pdf(label_info: LabelInfo, page_size: PaperSize, asn_start: u32, digits: usize, tag: String, code_format: BarcodeFormat, border: bool, output: PathBuf) -> Result<(), Error> {
+pub fn generate_pdf(
+label_info: LabelInfo,
+page_size: PaperSize,
+asn_start: u32,
+digits: usize,
+tag: String,
+code_format: BarcodeFormat,
+border: bool,
+output: PathBuf,
+    font_size: f32,
+) -> Result<(), Error> {
     let (page_width, page_height) = get_page_dimensions(&page_size);
 
     let mut doc = PdfDocument::new("Paperless ASN Barcode Generator");
     let mut msg_vec = Vec::new();
 
-    let font_size_text_pt = Pt(9.0);
+    let font_size_text_pt = Pt(font_size);
     let font_size_text_mm = Mm::from(font_size_text_pt);
 
     // add font file

@@ -29,6 +29,10 @@ pub struct Args {
     #[arg(default_value = "labels.pdf")]
     pub output: PathBuf,
 
+    /// Font size of the label text
+    #[arg(long, short, default_value="9")]
+    pub font_size: f32,
+
     /// Show label borders, helpful for test prints
     #[arg(long, short = 'b')]
     pub border: bool,
