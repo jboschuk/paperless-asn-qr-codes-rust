@@ -38,7 +38,7 @@ jobs:
           # Change directory to the release folder to ensure the archive structure is clean.
           # Then create a gzipped tar archive of the executable.
           cd target/x86_64-unknown-linux-gnu/release
-          tar -czvf ../../../paperless-asn-qr-codes-linux-x64.tar.gz paperless-asn-qr-codes
+          tar -czvf ../../../paperless-asn-qr-codes-linux-x64.tar.gz paperless-asn-qr-codes-rust
           # The path '../../../paperless-asn-qr-codes-linux-x64.tar.gz' places the archive
           # in the root of the workspace for easier artifact upload.
 
@@ -75,7 +75,7 @@ jobs:
       - name: Compress Windows executable
         run: |
           # Use PowerShell's Compress-Archive cmdlet to create a zip file.
-          Compress-Archive -Path target\x86_64-pc-windows-msvc\release\paperless-asn-qr-codes.exe -DestinationPath paperless-asn-qr-codes-windows-x64.zip
+          Compress-Archive -Path target\x86_64-pc-windows-msvc\release\paperless-asn-qr-codes-rust.exe -DestinationPath paperless-asn-qr-codes-windows-x64.zip
 
       # Step 5: Upload the compressed binary as an artifact
       - name: Upload Windows artifact
